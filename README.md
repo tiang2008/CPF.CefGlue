@@ -1,5 +1,3 @@
-# C#跨平台UI框架CPF https://gitee.com/csharpui/CPF
-﻿
 ## CPF.Cef
 
 对Cef的封装，支持跨平台
@@ -21,8 +19,6 @@ CEF_VERSION = "120.1.8+ge6b45b0+chromium-120.0.6099.109"
 将Wrapper/MessageRouter/Helpers.cs 改成public
 
 ### 使用说明
-
-案例源码：http://cpf.cskin.net/Item/19
 
 到 https://cef-builds.spotifycdn.com/index.html#windows32:120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109 下载对应平台的二进制文件，一般是选择 Sample Application ......client.tar.bz2
 
