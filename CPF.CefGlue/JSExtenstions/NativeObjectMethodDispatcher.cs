@@ -1,0 +1,80 @@
+﻿using CPF.CefGlue;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CPF.CefGlue.JSExtenstions
+{
+    internal class NativeObjectMethodDispatcher
+    {
+        private readonly NativeObjectRegistry _objectRegistry;
+
+        public NativeObjectMethodDispatcher(MessageDispatcher dispatcher, NativeObjectRegistry objectRegistry)
+        {
+            _objectRegistry = objectRegistry;
+            dispatcher.RegisterMessageHandler(Messages.NativeObjectCallRequest.Name, HandleNativeObjectCall);
+        }
+
+        private void HandleNativeObjectCall(MessageReceivedEventArgs args)
+        {
+            // message and arguments must be deserialized at this point because it will be disposed after
+            var message = Messages.NativeObjectCallRequest.FromCefMessage(args.Message);
+            var frame = args.Frame;
+            var callId = message.CallId;
+
+            var nativeObject = _objectRegistry.Get(message.ObjectName ?? "");
+            if (nativeObject == null)
+            {
+                SendResult(callId, null, $"Object named {message.ObjectName} was not found. Make sure it was registered before.", frame);
+                return;
+            }
+
+            nativeObject.ExecuteMethod(message.MemberName, message.ArgumentsOut, (result, exception) =>
+            {
+                using (CefObjectTracker.StartTracking())
+                {
+                    SendResult(callId, result, exception?.Message, frame);
+                }
+            });
+        }
+
+        private static void SendResult(int callId, object result, string exceptionMessage, CefFrame frame)
+        {
+            var resultMessage = new Messages.NativeObjectCallResult()
+            {
+                CallId = callId,
+                Result = new CefValueHolder(),
+            };
+
+            if (exceptionMessage != null)
+            {
+                resultMessage.Exception = exceptionMessage;
+            }
+            else if (result is Task)
+            {
+                resultMessage.Exception = "Unexpected Task type result";
+            }
+            else
+            {
+                try
+                {
+                    CefValueSerialization.Serialize(result, resultMessage.Result);
+                }
+                catch (Exception e)
+                {
+                    resultMessage.Exception = e.Message;
+                }
+            }
+
+            resultMessage.Success = resultMessage.Exception == null;
+
+            var cefMessage = resultMessage.ToCefProcessMessage();
+            if (frame.IsValid)
+            {
+                frame.SendProcessMessage(CefProcessId.Renderer, cefMessage);
+            }
+        }
+    }
+}

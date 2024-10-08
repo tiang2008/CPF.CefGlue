@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants />
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Stylesheet1.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Stylesheet1.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xhm.CPF" Version="0.9.6.7" />
+    <PackageReference Include="Xhm.CPF.Windows" Version="0.9.6.7" />
+    <PackageReference Include="Xhm.CPF.Skia" Version="0.9.6.7" />
+    <PackageReference Include="Xhm.CPF.Mac" Version="0.9.6.7" />
+    <PackageReference Include="Xhm.CPF.Linux" Version="0.9.6.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CPF.CefGlueGlue\CPF.CefGlueGlue.csproj" />
+  </ItemGroup>
+
+</Project>

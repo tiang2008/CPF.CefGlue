@@ -1,0 +1,90 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
+    <Product>QQ:761716178 跨平台UI框架</Product>
+    <Version>0.120.1.8</Version>
+    <PackageId>Xhm.CPF.CefGlue</PackageId>
+    <Description>CEF_VERSION  120.1.8+ge6b45b0+chromium-120.0.6099.109  CPF(Cross platform UI framework) QQ:761716178 跨平台UI框架  http://cpf.cskin.net/</Description>
+    <PackageProjectUrl>http://cpf.cskin.net/</PackageProjectUrl>
+    <Copyright>Copyright (c) 2020 by http://cpf.cskin.net/</Copyright>
+    <PackageReleaseNotes>CPF(Cross platform UI framework) QQ:761716178 跨平台UI框架  http://cpf.cskin.net/</PackageReleaseNotes>
+    <Authors>QQ:761716178</Authors>
+    <Company>QQ:761716178</Company>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<LangVersion>9.0</LangVersion>
+	<PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CefGlue84.3.7\**" />
+    <Compile Remove="CefGlue\**" />
+    <EmbeddedResource Remove="CefGlue84.3.7\**" />
+    <EmbeddedResource Remove="CefGlue\**" />
+    <None Remove="CefGlue84.3.7\**" />
+    <Compile Remove="CefGlue3683\**" />
+    <EmbeddedResource Remove="CefGlue3683\**" />
+    <None Remove="CefGlue3683\**" />
+    <Compile Remove="CefGlue3945\**" />
+    <EmbeddedResource Remove="CefGlue3945\**" />
+    <None Remove="CefGlue3945\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="CefGlue2623\**" />
+    <EmbeddedResource Remove="CefGlue2623\**" />
+    <None Remove="CefGlue2623\**" />
+    <None Remove="CefGlue\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="2623\**" />
+    <EmbeddedResource Remove="2623\**" />
+    <None Remove="2623\**" />
+  </ItemGroup>
+  
+  <!--<ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <Compile Remove="JSExtenstions\**" />
+    <EmbeddedResource Remove="JSExtenstions\**" />
+    <None Remove="JSExtenstions\**" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Compile Remove="Controls\IUiHelper.cs" />
+    <Compile Remove="Controls\LoadEndEventHandler.cs" />
+    <Compile Remove="Controls\LoadErrorEventHandler.cs" />
+    <Compile Remove="Controls\LoadingStateChangeEventHandler.cs" />
+    <Compile Remove="Controls\LoadStartEventHandler.cs" />
+    <Compile Remove="Controls\UiHelper.cs" />
+    <Compile Remove="Controls\WpfCefBrowser.cs" />
+    <Compile Remove="Controls\WpfCefJSAlert.xaml.cs" />
+    <Compile Remove="Controls\WpfCefJSConfirm.xaml.cs" />
+    <Compile Remove="Controls\WpfCefJSPrompt.xaml.cs" />
+    <Compile Remove="CpfCefSchemeHandlerFactory.cs" />
+    <Compile Remove="JSExtenstions\JsonConverters\BinaryJsonConverter.cs" />
+    <Compile Remove="JSExtenstions\JsonConverters\DateTimeJsonConverter.cs" />
+    <Compile Remove="JSExtenstions\JsonConverters\ObjectJsonConverter.cs" />
+    <Compile Remove="JSExtenstions\JsonConverters\StringJsonConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Controls\WpfCefJSAlert.xaml" />
+    <None Remove="Controls\WpfCefJSConfirm.xaml" />
+    <None Remove="Controls\WpfCefJSPrompt.xaml" />
+  </ItemGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>bin\Debug\CPF.CefGlue.xml</DocumentationFile>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <!--<ProjectReference Include="..\CPF\CPF.csproj" />-->
+      <PackageReference Include="Xhm.CPF" Version="0.9.6.*" />
+  </ItemGroup>
+  
+  <!--<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Text.Json">
+      <Version>6.0.0</Version>
+    </PackageReference>
+  </ItemGroup>-->
+
+</Project>
