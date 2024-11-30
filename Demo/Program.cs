@@ -7,7 +7,7 @@ using CPF.Windows;
 using System;
 using System.Linq;
 
-namespace CPF_Cef
+namespace Demo
 {
     class Program
     {

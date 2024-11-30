@@ -58,7 +58,7 @@ namespace CPF.CefGlue
                     break;
             }
 
-            AppDomain.CurrentDomain.ProcessExit += delegate { CefRuntime.Shutdown(); };
+            //AppDomain.CurrentDomain.ProcessExit += delegate { CefRuntime.Shutdown(); };
 
             IsOSREnabled = settings.WindowlessRenderingEnabled;
             CefRuntime.Initialize(new CefMainArgs(new string[0]), settings, new CpfCefApp(), IntPtr.Zero);

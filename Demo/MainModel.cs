@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CPF_Cef
+namespace Demo
 {
     class MainModel : CPF.CpfObject
     {

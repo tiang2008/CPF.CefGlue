@@ -12,13 +12,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CPF_Cef
+namespace Demo
 {
     public class Window1 : Window
     {
         protected override void InitializeComponent()
         {
-            LoadStyleFile("res://CPF_Cef/Stylesheet1.css");
+            LoadStyleFile("res://Demo/Stylesheet1.css");
             //加载样式文件，文件需要设置为内嵌资源
 
             Title = "标题";
@@ -140,9 +140,19 @@ namespace CPF_Cef
             base.OnInitialized();
             webBrowser = FindPresenterByName<WebBrowser>(nameof(webBrowser));
             textBox = FindPresenterByName<TextBox>(nameof(textBox));
+
+            webBrowser.LoadEnd += WebBrowser_LoadEnd; ;
+   
         }
+
+        private void WebBrowser_LoadEnd(object sender, LoadEndEventArgs e)
+        {
+            
+        }
+
         void SetUrl(CpfObject obj, RoutedEventArgs eventArgs)
         {
+           
             webBrowser.Url = textBox.Text;
         }
         void ShowDev(CpfObject obj, RoutedEventArgs eventArgs)
