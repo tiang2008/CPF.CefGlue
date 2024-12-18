@@ -14,11 +14,15 @@ namespace Demo
         [STAThread]
         static void Main(string[] args)
         {
-            Application.Initialize(
-                (OperatingSystemType.Windows, new WindowsPlatform(), new SkiaDrawingFactory())
-                , (OperatingSystemType.OSX, new MacPlatform(), new SkiaDrawingFactory())//如果需要支持Mac才需要
-                , (OperatingSystemType.Linux, new LinuxPlatform(), new SkiaDrawingFactory())//如果需要支持Linux才需要
-            );
+
+            var mainArgs = new CpfCefMainArgs(args);
+            var app = new CpfCefApp();
+            var exitCode = CefRuntime.ExecuteProcess(mainArgs, app, IntPtr.Zero);
+            if (exitCode != -1)
+            {
+                Environment.Exit(exitCode);
+                return;
+            }
 
             //到 https://cef-builds.spotifycdn.com/index.html#windows32:120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109 下载对应平台的二进制文件，一般是选择 Sample Application ......client.tar.bz2
             //需要注意的是如果你需要的是Linux平台的，需要手动使用strip命令将调试信息剥离（Linux那边打开控制台输入strip 再把libcef.so拖进来，再按enter，so文件就小了）或者自己调整编译参数重新编译，因为网站上下载的二进制文件巨大，达到一个G了
@@ -34,21 +38,15 @@ namespace Demo
             //OnCreateWebBrowser里面写client.LoadHandler = new CpfCefLoadHandler();继承并重写对应的Handler并设置过来
 
             //mac上运行在任务栏上可能会有多个图标闪烁之后就没了，是正常的，cef的多进程问题，不影响使用
-            var parentProcessId = GetArgumentValue(args, CommandLineArgs.ParentProcessId);
-            if (parentProcessId != null && int.TryParse(parentProcessId, out var parentProcessIdAsInt))
-            {
-                ParentProcessMonitor.StartMonitoring(parentProcessIdAsInt);
-            }
+
+            Application.Initialize(
+                (OperatingSystemType.Windows, new WindowsPlatform(), new SkiaDrawingFactory())
+                , (OperatingSystemType.OSX, new MacPlatform(), new SkiaDrawingFactory())//如果需要支持Mac才需要
+                , (OperatingSystemType.Linux, new LinuxPlatform(), new SkiaDrawingFactory())//如果需要支持Linux才需要
+            );
 
             CefRuntime.Load();
-            var mainArgs = new CpfCefMainArgs(args);
-            var app = new CpfCefApp();
-            var exitCode = CefRuntime.ExecuteProcess(mainArgs, app, IntPtr.Zero);
-            if (exitCode != -1)
-            {
-                Environment.Exit(exitCode);
-                return;
-            }
+
             CefRuntime.Initialize(mainArgs, new CefSettings { }, app, IntPtr.Zero);
 
             var model = new MainModel();
@@ -56,17 +54,5 @@ namespace Demo
 
             CefRuntime.Shutdown();
         }
-        private static string GetArgumentValue(string[] args, string argName)
-        {
-            var arg = args.FirstOrDefault(a => a?.StartsWith(argName + "=") == true);
-            return arg?.Substring(argName.Length + 1) ?? "";
-        }
-
-    }
-
-    internal static class CommandLineArgs
-    {
-        public const string CustomScheme = "--custom-scheme";
-        public const string ParentProcessId = "--parent-pid";
     }
 }

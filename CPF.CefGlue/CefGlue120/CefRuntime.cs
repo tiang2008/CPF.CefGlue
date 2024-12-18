@@ -180,7 +180,7 @@
         /// </summary>
         public static int ExecuteProcess(CefMainArgs args, CefApp application, IntPtr windowsSandboxInfo)
         {
-            LoadIfNeed();
+            //LoadIfNeed();
 
             var n_args = args.ToNative();
             var n_app = application != null ? application.ToNative() : null;
