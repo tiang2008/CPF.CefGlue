@@ -1,20 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ApplicationIcon />
-    <StartupObject />
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Platforms>AnyCPU</Platforms>
+  <OutputType>Exe</OutputType>
+	<TargetFramework>net8.0-windows</TargetFramework>
+	<LangVersion>9.0</LangVersion>
+	<!--<InvariantGlobalization>false</InvariantGlobalization>-->
+	<!--<WindowsSupportedOSPlatformVersion>5.1</WindowsSupportedOSPlatformVersion>-->
+	<!--<SupportWinXP>true</SupportWinXP>-->
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<!--<DebugType>none</DebugType>-->
+	<PublishAot>True</PublishAot>
+	<PublishTrimmed>True</PublishTrimmed>
+	<!--<StripSymbols>false</StripSymbols>-->
+	<OptimizationPreference>Speed</OptimizationPreference>
+	<!--<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>-->
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants />
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<DefineConstants />
+	</PropertyGroup>
+	
   <ItemGroup>
     <None Remove="Stylesheet1.css" />
   </ItemGroup>
@@ -30,9 +36,17 @@
     <PackageReference Include="Xhm.CPF.Mac" Version="0.9.6.*" />
     <PackageReference Include="Xhm.CPF.Linux" Version="0.9.6.*" />
   </ItemGroup>
-
+	
   <ItemGroup>
     <ProjectReference Include="..\CPF.CefGlue\CPF.CefGlue.csproj" />
   </ItemGroup>
+
+	<PropertyGroup>
+		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
+		<IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+	</PropertyGroup>
+	<ItemGroup>
+		<RdXmlFile Include="rd.xml" />
+	</ItemGroup>
 
 </Project>

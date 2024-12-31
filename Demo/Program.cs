@@ -41,8 +41,8 @@ namespace Demo
 
             Application.Initialize(
                 (OperatingSystemType.Windows, new WindowsPlatform(), new SkiaDrawingFactory())
-                , (OperatingSystemType.OSX, new MacPlatform(), new SkiaDrawingFactory())//如果需要支持Mac才需要
-                , (OperatingSystemType.Linux, new LinuxPlatform(), new SkiaDrawingFactory())//如果需要支持Linux才需要
+                //, (OperatingSystemType.OSX, new MacPlatform(), new SkiaDrawingFactory())//如果需要支持Mac才需要
+                //, (OperatingSystemType.Linux, new LinuxPlatform(), new SkiaDrawingFactory())//如果需要支持Linux才需要
             );
 
             CefRuntime.Load();
