@@ -592,7 +592,7 @@
         /// <summary>
         /// Sets the font list for the specified |command_id|. If |font_list| is empty
         /// the system font will be used. Returns true on success. The format is
-        /// "&lt;FONT_FAMILY_LIST&gt;,[STYLES] &lt;SIZE&gt;", where:
+        /// "<FONT_FAMILY_LIST>,[STYLES] <SIZE>", where:
         /// - FONT_FAMILY_LIST is a comma-separated list of font family names,
         /// - STYLES is an optional space-separated list of style names
         /// (case-sensitive "Bold" and "Italic" are supported), and
@@ -614,7 +614,7 @@
         /// Sets the font list for the specified |index|. Specify an |index| value of
         /// -1 to set the default font. If |font_list| is empty the system font will
         /// be used. Returns true on success. The format is
-        /// "&lt;FONT_FAMILY_LIST&gt;,[STYLES] &lt;SIZE&gt;", where:
+        /// "<FONT_FAMILY_LIST>,[STYLES] <SIZE>", where:
         /// - FONT_FAMILY_LIST is a comma-separated list of font family names,
         /// - STYLES is an optional space-separated list of style names
         /// (case-sensitive "Bold" and "Italic" are supported), and

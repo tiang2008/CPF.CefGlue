@@ -137,7 +137,7 @@
             string actual;
             try
             {
-                var n_actual = libcef.api_hash(0);
+                var n_actual = libcef.api_hash(999999, 2);
                 actual = n_actual != null ? new string(n_actual) : null;
             }
             catch (EntryPointNotFoundException ex)
@@ -146,7 +146,9 @@
             }
             if (string.IsNullOrEmpty(actual)) throw new NotSupportedException();
 
-            string expected;
+            string expected = libcef.CEF_COMMIT_HASH;
+            
+            /*
             switch (CefRuntime.Platform)
             {
                 case CefRuntimePlatform.Windows: expected = libcef.CEF_API_HASH_PLATFORM_WIN; break;
@@ -154,10 +156,11 @@
                 case CefRuntimePlatform.Linux: expected = libcef.CEF_API_HASH_PLATFORM_LINUX; break;
                 default: throw new PlatformNotSupportedException();
             }
+            */
 
             if (string.Compare(actual, expected, StringComparison.OrdinalIgnoreCase) != 0)
             {
-                var expectedVersion = libcef.CEF_VERSION;
+                string expectedVersion = libcef.CEF_VERSION;
                 throw ExceptionBuilder.RuntimeVersionApiHashMismatch(actual, expected, expectedVersion);
             }
         }
@@ -180,7 +183,7 @@
         /// </summary>
         public static int ExecuteProcess(CefMainArgs args, CefApp application, IntPtr windowsSandboxInfo)
         {
-            //LoadIfNeed();
+            LoadIfNeed();
 
             var n_args = args.ToNative();
             var n_app = application != null ? application.ToNative() : null;
@@ -227,6 +230,38 @@
                 if (libcef.initialize(n_main_args, n_settings, n_app, (void*)windowsSandboxInfo) != 0)
                 {
                     _initialized = true;
+                    if (!settings.MultiThreadedMessageLoop)
+                    {
+                        //var aa =System.Reflection. Assembly.GetEntryAssembly();
+                        //CPF.Threading.DispatcherTimer timer = new CPF.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(15), IsEnabled = true };
+                        //timer.Tick += delegate
+                        //{
+                        //    DoMessageLoopWork();
+                        //};
+                        //int id = System.Threading.Thread.CurrentThread.ManagedThreadId;
+                        new System.Threading.Thread(a =>
+                        {
+                            while (true)
+                            {
+                                try
+                                {
+                                    System.Threading.Thread.Sleep(15);
+                                    if (CPF.Platform.Application.Main != null)
+                                    {
+                                        CPF.Threading.Dispatcher.MainThread.Invoke(() =>
+                                        {
+                                            DoMessageLoopWork();
+                                        });
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e);
+                                }
+                            }
+                        })
+                        { IsBackground = true, Name = "cef线程" }.Start();
+                    }
                 }
                 else
                 {
@@ -246,7 +281,20 @@
             Initialize(args, settings, application, IntPtr.Zero);
         }
 
-
+        /// <summary>
+        /// This function can optionally be called on the main application thread after
+        /// CefInitialize to retrieve the initialization exit code. When CefInitialize
+        /// returns true the exit code will be 0 (CEF_RESULT_CODE_NORMAL_EXIT).
+        /// Otherwise, see cef_resultcode_t for possible exit code values including
+        /// browser process initialization errors and normal early exit conditions (such
+        /// as CEF_RESULT_CODE_NORMAL_EXIT_PROCESS_NOTIFIED for process singleton
+        /// relaunch behavior).
+        /// </summary>
+        public static int GetExitCode()
+        {
+            return libcef.get_exit_code();
+        }
+        
         /// <summary>
         /// This function should be called on the main application thread to shut down
         /// the CEF browser process before the application exits.
@@ -578,12 +626,13 @@
             fixed (char* url_str = url)
             {
                 var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
-                var n_parts = new cef_urlparts_t();
+                var n_parts = cef_urlparts_t.Alloc();
 
-                var result = libcef.parse_url(&n_url, &n_parts) != 0;
+                var result = libcef.parse_url(&n_url, n_parts) != 0;
 
-                parts = result ? CefUrlParts.FromNative(&n_parts) : null;
-                cef_urlparts_t.Clear(&n_parts);
+                parts = result ? CefUrlParts.FromNative(n_parts) : null;
+                cef_urlparts_t.Clear(n_parts);
+                cef_urlparts_t.Free(n_parts);
                 return result;
             }
         }
@@ -645,7 +694,7 @@
         /// </summary>
         public static unsafe string Base64Encode(void* data, int size)
         {
-            var n_result = libcef.base64encode(data, (UIntPtr)size);
+            var n_result = libcef.base64_encode(data, (UIntPtr)size);
             return cef_string_userfree.ToString(n_result);
         }
 
@@ -673,7 +722,7 @@
             fixed (char* data_str = data)
             {
                 var n_data = new cef_string_t(data_str, data != null ? data.Length : 0);
-                return CefBinaryValue.FromNative(libcef.base64decode(&n_data));
+                return CefBinaryValue.FromNative(libcef.base64_decode(&n_data));
             }
         }
 

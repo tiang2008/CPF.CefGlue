@@ -1,33 +1,25 @@
-﻿namespace CPF.CefGlue
+﻿using CPF.CefGlue.Interop;
+
+namespace CPF.CefGlue;
+
+/// <summary>
+///     Class representing SSL information.
+/// </summary>
+public sealed unsafe partial class CefSslInfo
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using CPF.CefGlue.Interop;
+    /// <summary>
+    ///     Returns a bitmask containing any and all problems verifying the server
+    ///     certificate.
+    /// </summary>
+    public CefCertStatus CertStatus => cef_sslinfo_t.get_cert_status(_self);
 
     /// <summary>
-    /// Class representing SSL information.
+    ///     Returns the X.509 certificate.
     /// </summary>
-    public sealed unsafe partial class CefSslInfo
+    public CefX509Certificate GetX509Certificate()
     {
-        /// <summary>
-        /// Returns a bitmask containing any and all problems verifying the server
-        /// certificate.
-        /// </summary>
-        public CefCertStatus CertStatus
-        {
-            get { return cef_sslinfo_t.get_cert_status(_self); }
-        }
-
-        /// <summary>
-        /// Returns the X.509 certificate.
-        /// </summary>
-        public CefX509Certificate GetX509Certificate()
-        {
-            return CefX509Certificate.FromNative(
-                cef_sslinfo_t.get_x509certificate(_self)
-                );
-        }
+        return CefX509Certificate.FromNative(
+            cef_sslinfo_t.get_x509_certificate(_self)
+        );
     }
 }

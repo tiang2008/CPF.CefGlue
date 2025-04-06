@@ -28,5 +28,15 @@ namespace CPF.CefGlue
         /// Out of memory. Some platforms may use TS_PROCESS_CRASHED instead.
         /// </summary>
         OutOfMemory,
+        
+        /// <summary>
+        /// Child process never launched.
+        /// </summary>
+        LaunchFailed,
+        
+        /// <summary>
+        /// On Windows, the OS terminated the process due to code integrity failure.
+        /// </summary>
+        IntegrityFailure,
     }
 }

@@ -34,14 +34,14 @@
         /// </summary>
         public CefCompositionUnderlineStyle Style { get; set; }
 
-        internal cef_composition_underline_t ToNative()
+        internal unsafe cef_composition_underline_t* ToNative()
         {
-            cef_composition_underline_t result;
-            result.range = new cef_range_t(Range.From, Range.To);
-            result.color = Color.ToArgb();
-            result.background_color = BackgroundColor.ToArgb();
-            result.thick = Thick ? 1 : 0;
-            result.style = Style;
+            cef_composition_underline_t* result = cef_composition_underline_t.Alloc();
+            result->range = new cef_range_t(Range.From, Range.To);
+            result->color = Color.ToArgb();
+            result->background_color = BackgroundColor.ToArgb();
+            result->thick = Thick ? 1 : 0;
+            result->style = Style;
             return result;
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace CPF.CefGlue
+﻿using System.Runtime.InteropServices;
+
+namespace CPF.CefGlue
 {
     using System;
     using CPF.CefGlue.Interop;

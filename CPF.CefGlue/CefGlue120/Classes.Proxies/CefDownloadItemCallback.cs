@@ -1,38 +1,33 @@
-﻿namespace CPF.CefGlue
+﻿using CPF.CefGlue.Interop;
+
+namespace CPF.CefGlue;
+
+/// <summary>
+///     Callback interface used to asynchronously cancel a download.
+/// </summary>
+public sealed unsafe partial class CefDownloadItemCallback
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using CPF.CefGlue.Interop;
+    /// <summary>
+    ///     Call to cancel the download.
+    /// </summary>
+    public void Cancel()
+    {
+        cef_download_item_callback_t.cancel(_self);
+    }
 
     /// <summary>
-    /// Callback interface used to asynchronously cancel a download.
+    ///     Call to pause the download.
     /// </summary>
-    public sealed unsafe partial class CefDownloadItemCallback
+    public void Pause()
     {
-        /// <summary>
-        /// Call to cancel the download.
-        /// </summary>
-        public void Cancel()
-        {
-            cef_download_item_callback_t.cancel(_self);
-        }
+        cef_download_item_callback_t.pause(_self);
+    }
 
-        /// <summary>
-        /// Call to pause the download.
-        /// </summary>
-        public void Pause()
-        {
-            cef_download_item_callback_t.pause(_self);
-        }
-
-        /// <summary>
-        /// Call to resume the download.
-        /// </summary>
-        public void Resume()
-        {
-            cef_download_item_callback_t.resume(_self);
-        }
+    /// <summary>
+    ///     Call to resume the download.
+    /// </summary>
+    public void Resume()
+    {
+        cef_download_item_callback_t.resume(_self);
     }
 }

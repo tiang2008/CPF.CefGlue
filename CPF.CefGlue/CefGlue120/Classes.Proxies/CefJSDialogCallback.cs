@@ -1,29 +1,24 @@
-﻿namespace CPF.CefGlue
+﻿using CPF.CefGlue.Interop;
+
+namespace CPF.CefGlue;
+
+/// <summary>
+///     Callback interface used for asynchronous continuation of JavaScript dialog
+///     requests.
+/// </summary>
+public sealed unsafe partial class CefJSDialogCallback
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using CPF.CefGlue.Interop;
-
     /// <summary>
-    /// Callback interface used for asynchronous continuation of JavaScript dialog
-    /// requests.
+    ///     Continue the JS dialog request. Set |success| to true if the OK button was
+    ///     pressed. The |user_input| value should be specified for prompt dialogs.
     /// </summary>
-    public sealed unsafe partial class CefJSDialogCallback
+    public void Continue(bool success, string userInput)
     {
-        /// <summary>
-        /// Continue the JS dialog request. Set |success| to true if the OK button was
-        /// pressed. The |user_input| value should be specified for prompt dialogs.
-        /// </summary>
-        public void Continue(bool success, string userInput)
+        fixed (char* userInput_str = userInput)
         {
-            fixed (char* userInput_str = userInput)
-            {
-                var n_userInput = new cef_string_t(userInput_str, userInput != null ? userInput.Length : 0);
+            var n_userInput = new cef_string_t(userInput_str, userInput != null ? userInput.Length : 0);
 
-                cef_jsdialog_callback_t.cont(_self, success ? 1 : 0, &n_userInput);
-            }
+            cef_jsdialog_callback_t.cont(_self, success ? 1 : 0, &n_userInput);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CPF.CefGlue
         //   300-399 HTTP errors
         //   400-499 Cache errors
         //   500-599 ?
-        //   600-699 FTP errors
+        //   600-699 <Obsolete: FTP errors>
         //   700-799 Certificate manager errors
         //   800-899 DNS resolver errors
 
@@ -187,6 +187,12 @@ namespace CPF.CefGlue
         /// The request was blocked by CORB or ORB.
         /// </summary>
         BLOCKED_BY_ORB = -32,
+        
+        /// <summary>
+        /// The request was blocked because it originated from a frame that has disabled
+        /// network access. 
+        /// </summary>
+        NETWORK_ACCESS_REVOKED = -33,
 
         /// <summary>
         /// A connection was closed (corresponding to a TCP FIN).
@@ -397,7 +403,7 @@ namespace CPF.CefGlue
         /// received a 302 (temporary redirect) response.  The response body might
         /// include a description of why the request failed.
         ///
-        /// TODO(https://crbug.com/928551): This is deprecated and should not be used by
+        /// TODO(crbug.com/40093955): This is deprecated and should not be used by
         /// new code.
         /// </summary>
         HTTPS_PROXY_TUNNEL_RESPONSE_REDIRECT = -140,
@@ -1179,6 +1185,28 @@ namespace CPF.CefGlue
         /// network access check.
         /// </summary>
         CACHED_IP_ADDRESS_SPACE_BLOCKED_BY_PRIVATE_NETWORK_ACCESS_POLICY = -384,
+        
+        /// <summary>
+        /// The connection is blocked by private network access checks.
+        /// </summary>
+        BLOCKED_BY_PRIVATE_NETWORK_ACCESS_CHECKS = -385,
+        
+        /// <summary>
+        /// Content decoding failed due to the zstd window size being too big (over 8MB).
+        /// </summary>
+        ZSTD_WINDOW_SIZE_TOO_BIG = -386,
+        
+        /// <summary>
+        /// The compression dictionary cannot be loaded.
+        /// </summary>
+        DICTIONARY_LOAD_FAILED = -387,
+        
+        /// <summary>
+        /// The "content-dictionary" response header is unexpected. This is used both
+        /// when there is no "content-dictionary" response header and when the received
+        /// "content-dictionary" response header does not match the expected value.
+        /// </summary>
+        UNEXPECTED_CONTENT_DICTIONARY_HEADER = 388,
 
         /// <summary>
         /// The cache does not have the requested entry.
@@ -1304,50 +1332,13 @@ namespace CPF.CefGlue
 
         // *** Code -600 is reserved (was FTP_PASV_COMMAND_FAILED). ***
 
-        /// <summary>
-        /// A generic error for failed FTP control connection command.
-        /// If possible, please use or add a more specific error code.
-        /// </summary>
-        FTP_FAILED = -601,
-
-        /// <summary>
-        /// The server cannot fulfill the request at this point. This is a temporary
-        /// error.
-        /// FTP response code 421.
-        /// </summary>
-        FTP_SERVICE_UNAVAILABLE = -602,
-
-        /// <summary>
-        /// The server has aborted the transfer.
-        /// FTP response code 426.
-        /// </summary>
-        FTP_TRANSFER_ABORTED = -603,
-
-        /// <summary>
-        /// The file is busy, or some other temporary error condition on opening
-        /// the file.
-        /// FTP response code 450.
-        /// </summary>
-        FTP_FILE_BUSY = -604,
-
-        /// <summary>
-        /// Server rejected our command because of syntax errors.
-        /// FTP response codes 500, 501.
-        /// </summary>
-        FTP_SYNTAX_ERROR = -605,
-
-        /// <summary>
-        /// Server does not support the command we issued.
-        /// FTP response codes 502, 504.
-        /// </summary>
-        FTP_COMMAND_NOT_SUPPORTED = -606,
-
-        /// <summary>
-        /// Server rejected our command because we didn't issue the commands in right
-        /// order.
-        /// FTP response code 503.
-        /// </summary>
-        FTP_BAD_COMMAND_SEQUENCE = -607,
+        // *** Code -601 is reserved (was FTP_FAILED). ***
+        // *** Code -602 is reserved (was FTP_SERVICE_UNAVAILABLE). ***
+        // *** Code -603 is reserved (was FTP_TRANSFER_ABORTED). ***
+        // *** Code -604 is reserved (was FTP_FILE_BUSY). ***
+        // *** Code -605 is reserved (was FTP_SYNTAX_ERROR). ***
+        // *** Code -606 is reserved (was FTP_COMMAND_NOT_SUPPORTED). ***
+        // *** Code -607 is reserved (was FTP_BAD_COMMAND_SEQUENCE). ***
 
         /// <summary>
         /// PKCS #12 import failed due to incorrect password.
@@ -1492,6 +1483,15 @@ namespace CPF.CefGlue
         /// alpn values of supported protocols, but did not.
         /// </summary>
         DNS_NO_MATCHING_SUPPORTED_ALPN = -811,
+        
+        // Error -812 was removed
+        // Error -813 was removed
+
+        /// <summary>
+        /// When checking whether secure DNS can be used, the response returned for the
+        /// requested probe record either had no answer or was invalid. 
+        /// </summary>
+        DNS_SECURE_PROBE_RECORD_INVALID = -814,
 
         // CefGlue backward compatiblity.
         // Generally we prefer .NET naming rules, but will care about later.

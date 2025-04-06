@@ -1,5 +1,4 @@
-﻿using CPF.CefGlue.Wrapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,6 +9,7 @@ using System.Collections.Concurrent;
 using CPF.Controls;
 using System.Linq;
 using CPF.CefGlue.JSExtenstions;
+using CPF.CefGlue.Wrapper;
 
 namespace CPF.CefGlue
 {
@@ -173,7 +173,7 @@ namespace CPF.CefGlue
 
             //if (browsers.TryGetValue(message.Arguments.GetValue(0).GetInt(), out var browser))
             //{
-            var frame = browser.GetFrame(long.Parse(message.Arguments.GetValue(1).GetString()));
+            var frame = browser.GetFrameByIdentifier(message.Arguments.GetValue(1).GetString());
             if (frame != null)
             {
                 try

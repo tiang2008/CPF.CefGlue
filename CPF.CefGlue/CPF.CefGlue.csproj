@@ -2,39 +2,15 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
     <Product>Cef浏览器控件</Product>
-    <Version>1.120.1.8</Version>
+    <Version>2.133.4.2</Version>
 	<Authors>tian2008</Authors>
     <PackageId>CPF.CefGlue</PackageId>
     <Description>CEF_VERSION  120.1.8+ge6b45b0+chromium-120.0.6099.109  Cef浏览器控件</Description>
     <PackageReleaseNotes>Cef浏览器控件</PackageReleaseNotes>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<LangVersion>9.0</LangVersion>
+	<LangVersion>latest</LangVersion>
 	<PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Controls\IUiHelper.cs" />
-    <Compile Remove="Controls\LoadEndEventHandler.cs" />
-    <Compile Remove="Controls\LoadErrorEventHandler.cs" />
-    <Compile Remove="Controls\LoadingStateChangeEventHandler.cs" />
-    <Compile Remove="Controls\LoadStartEventHandler.cs" />
-    <Compile Remove="Controls\UiHelper.cs" />
-    <Compile Remove="Controls\WpfCefBrowser.cs" />
-    <Compile Remove="Controls\WpfCefJSAlert.xaml.cs" />
-    <Compile Remove="Controls\WpfCefJSConfirm.xaml.cs" />
-    <Compile Remove="Controls\WpfCefJSPrompt.xaml.cs" />
-    <Compile Remove="CpfCefSchemeHandlerFactory.cs" />
-    <Compile Remove="JSExtenstions\JsonConverters\BinaryJsonConverter.cs" />
-    <Compile Remove="JSExtenstions\JsonConverters\DateTimeJsonConverter.cs" />
-    <Compile Remove="JSExtenstions\JsonConverters\ObjectJsonConverter.cs" />
-    <Compile Remove="JSExtenstions\JsonConverters\StringJsonConverter.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Controls\WpfCefJSAlert.xaml" />
-    <None Remove="Controls\WpfCefJSConfirm.xaml" />
-    <None Remove="Controls\WpfCefJSPrompt.xaml" />
-  </ItemGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <DocumentationFile>bin\Debug\CPF.CefGlue.xml</DocumentationFile>

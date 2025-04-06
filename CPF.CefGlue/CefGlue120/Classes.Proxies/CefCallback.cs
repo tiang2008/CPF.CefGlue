@@ -1,30 +1,25 @@
-﻿namespace CPF.CefGlue
+﻿using CPF.CefGlue.Interop;
+
+namespace CPF.CefGlue;
+
+/// <summary>
+///     Generic callback interface used for asynchronous continuation.
+/// </summary>
+public sealed unsafe partial class CefCallback
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using CPF.CefGlue.Interop;
+    /// <summary>
+    ///     Continue processing.
+    /// </summary>
+    public void Continue()
+    {
+        cef_callback_t.cont(_self);
+    }
 
     /// <summary>
-    /// Generic callback interface used for asynchronous continuation.
+    ///     Cancel processing.
     /// </summary>
-    public sealed unsafe partial class CefCallback
+    public void Cancel()
     {
-        /// <summary>
-        /// Continue processing.
-        /// </summary>
-        public void Continue()
-        {
-            cef_callback_t.cont(_self);
-        }
-
-        /// <summary>
-        /// Cancel processing.
-        /// </summary>
-        public void Cancel()
-        {
-            cef_callback_t.cancel(_self);
-        }
+        cef_callback_t.cancel(_self);
     }
 }

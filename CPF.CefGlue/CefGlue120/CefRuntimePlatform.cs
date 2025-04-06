@@ -1,11 +1,8 @@
-﻿namespace CPF.CefGlue
-{
-    using System;
+﻿namespace CPF.CefGlue;
 
-    public enum CefRuntimePlatform
-    {
-        Windows,
-        Linux,
-        MacOS,
-    }
+public enum CefRuntimePlatform
+{
+    Windows,
+    Linux,
+    MacOS
 }

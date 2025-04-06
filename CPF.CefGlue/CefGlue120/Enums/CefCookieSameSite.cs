@@ -12,6 +12,6 @@ namespace CPF.CefGlue
         Unspecified,
         NoRestriction,
         LaxMode,
-        StrictMode,
+        StrictMode
     }
 }

@@ -70,6 +70,20 @@
             }
         }
 
+        public override CefRuntimeStyle RuntimeStyle
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _self->runtime_style;
+            }
+            set
+            {
+                ThrowIfDisposed();
+                _self->runtime_style = value;
+            }
+        }
+
         public override WindowStyle Style
         {
             get { ThrowIfDisposed(); return (WindowStyle)_self->style; }

@@ -1,34 +1,32 @@
-﻿namespace CPF.CefGlue
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
-    using CPF.CefGlue.Interop;
+﻿using System;
+using System.Runtime.CompilerServices;
+using CPF.CefGlue.Interop;
 
-    /// <summary>
-    /// A request context provides request handling for a set of related browser
-    /// or URL request objects. A request context can be specified when creating a
-    /// new browser via the CefBrowserHost static factory methods or when creating a
-    /// new URL request via the CefURLRequest static factory methods. Browser
-    /// objects with different request contexts will never be hosted in the same
-    /// render process. Browser objects with the same request context may or may not
-    /// be hosted in the same render process depending on the process model. Browser
-    /// objects created indirectly via the JavaScript window.open function or
-    /// targeted links will share the same render process and the same request
-    /// context as the source browser. When running in single-process mode there is
-    /// only a single render process (the main process) and so all browsers created
-    /// in single-process mode will share the same request context. This will be the
-    /// first request context passed into a CefBrowserHost static factory method and
-    /// all other request context objects will be ignored.
-    /// </summary>
-    public sealed unsafe partial class CefRequestContext
-    {
+#nullable enable
+namespace CPF.CefGlue;
+
+/// <summary>
+///     A request context provides request handling for a set of related browser
+///     or URL request objects. A request context can be specified when creating a
+///     new browser via the CefBrowserHost static factory methods or when creating a
+///     new URL request via the CefURLRequest static factory methods. Browser objects
+///     with different request contexts will never be hosted in the same render
+///     process. Browser objects with the same request context may or may not be
+///     hosted in the same render process depending on the process model. Browser
+///     objects created indirectly via the JavaScript window.open function or
+///     targeted links will share the same render process and the same request
+///     context as the source browser. When running in single-process mode there is
+///     only a single render process (the main process) and so all browsers created
+///     in single-process mode will share the same request context. This will be the
+///     first request context passed into a CefBrowserHost static factory method and
+///     all other request context objects will be ignored.
+/// </summary>
+public sealed unsafe partial class CefRequestContext
+{
 #if !NET40
-[MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        private cef_request_context_t* GetSelf()
+    private cef_request_context_t* GetSelf()
             => (cef_request_context_t*)_self;
 
         /// <summary>
@@ -237,126 +235,6 @@
         }
 
         /// <summary>
-        /// Load an extension.
-        /// If extension resources will be read from disk using the default load
-        /// implementation then |root_directory| should be the absolute path to the
-        /// extension resources directory and |manifest| should be NULL. If extension
-        /// resources will be provided by the client (e.g. via CefRequestHandler
-        /// and/or CefExtensionHandler) then |root_directory| should be a path
-        /// component unique to the extension (if not absolute this will be internally
-        /// prefixed with the PK_DIR_RESOURCES path) and |manifest| should contain the
-        /// contents that would otherwise be read from the "manifest.json" file on
-        /// disk.
-        /// The loaded extension will be accessible in all contexts sharing the same
-        /// storage (HasExtension returns true). However, only the context on which
-        /// this method was called is considered the loader (DidLoadExtension returns
-        /// true) and only the loader will receive CefRequestContextHandler callbacks
-        /// for the extension.
-        /// CefExtensionHandler::OnExtensionLoaded will be called on load success or
-        /// CefExtensionHandler::OnExtensionLoadFailed will be called on load failure.
-        /// If the extension specifies a background script via the "background"
-        /// manifest key then CefExtensionHandler::OnBeforeBackgroundBrowser will be
-        /// called to create the background browser. See that method for additional
-        /// information about background scripts.
-        /// For visible extension views the client application should evaluate the
-        /// manifest to determine the correct extension URL to load and then pass that
-        /// URL to the CefBrowserHost::CreateBrowser* function after the extension has
-        /// loaded. For example, the client can look for the "browser_action" manifest
-        /// key as documented at
-        /// https://developer.chrome.com/extensions/browserAction. Extension URLs take
-        /// the form "chrome-extension://&lt;extension_id&gt;/&lt;path&gt;".
-        /// Browsers that host extensions differ from normal browsers as follows:
-        /// - Can access chrome.* JavaScript APIs if allowed by the manifest. Visit
-        /// chrome://extensions-support for the list of extension APIs currently
-        /// supported by CEF.
-        /// - Main frame navigation to non-extension content is blocked.
-        /// - Pinch-zooming is disabled.
-        /// - CefBrowserHost::GetExtension returns the hosted extension.
-        /// - CefBrowserHost::IsBackgroundHost returns true for background hosts.
-        /// See https://developer.chrome.com/extensions for extension implementation
-        /// and usage documentation.
-        /// </summary>
-        public void LoadExtension(string rootDirectory, CefDictionaryValue manifest, CefExtensionHandler handler)
-        {
-            fixed(char* rootDirectory_str = rootDirectory)
-            {
-                var n_rootDirectory = new cef_string_t(rootDirectory_str, rootDirectory != null ? rootDirectory.Length : 0);
-                var n_manifest = manifest != null ? manifest.ToNative() : null;
-                var n_handler = handler != null ? handler.ToNative() : null;
-                cef_request_context_t.load_extension(GetSelf(), &n_rootDirectory, n_manifest, n_handler);
-            }
-        }
-
-        /// <summary>
-        /// Returns true if this context was used to load the extension identified by
-        /// |extension_id|. Other contexts sharing the same storage will also have
-        /// access to the extension (see HasExtension). This method must be called on
-        /// the browser process UI thread.
-        /// </summary>
-        public bool DidLoadExtension(string extensionId)
-        {
-            fixed(char* extensionId_str = extensionId)
-            {
-                var n_extensionId = new cef_string_t(extensionId_str, extensionId != null ? extensionId.Length : 0);
-                return cef_request_context_t.did_load_extension(GetSelf(), &n_extensionId) != 0;
-            }
-        }
-
-        /// <summary>
-        /// Returns true if this context has access to the extension identified by
-        /// |extension_id|. This may not be the context that was used to load the
-        /// extension (see DidLoadExtension). This method must be called on the
-        /// browser process UI thread.
-        /// </summary>
-        public bool HasExtension(string extensionId)
-        {
-            fixed (char* extensionId_str = extensionId)
-            {
-                var n_extensionId = new cef_string_t(extensionId_str, extensionId != null ? extensionId.Length : 0);
-                return cef_request_context_t.has_extension(GetSelf(), &n_extensionId) != 0;
-            }
-        }
-
-        /// <summary>
-        /// Retrieve the list of all extensions that this context has access to (see
-        /// HasExtension). |extension_ids| will be populated with the list of
-        /// extension ID values. Returns true on success. This method must be called
-        /// on the browser process UI thread.
-        /// </summary>
-        public bool GetExtensions(out string[] extensionIds)
-        {
-            var n_extensionIds = libcef.string_list_alloc();
-
-            var result = cef_request_context_t.get_extensions(GetSelf(), n_extensionIds) != 0;
-            if (result)
-            {
-                extensionIds = cef_string_list.ToArray(n_extensionIds);
-            }
-            else
-            {
-                extensionIds = null;
-            }
-
-            libcef.string_list_free(n_extensionIds);
-            return result;
-        }
-
-        /// <summary>
-        /// Returns the extension matching |extension_id| or NULL if no matching
-        /// extension is accessible in this context (see HasExtension). This method
-        /// must be called on the browser process UI thread.
-        /// </summary>
-        public CefExtension GetExtension(string extensionId)
-        {
-            fixed (char* extensionId_str = extensionId)
-            {
-                var n_extensionId = new cef_string_t(extensionId_str, extensionId != null ? extensionId.Length : 0);
-                var n_result = cef_request_context_t.get_extension(GetSelf(), &n_extensionId);
-                return CefExtension.FromNativeOrNull(n_result);
-            }
-        }
-
-        /// <summary>
         /// Returns the MediaRouter object associated with this context.  If
         /// |callback| is non-NULL it will be executed asnychronously on the UI thread
         /// after the manager's context has been initialized.
@@ -367,112 +245,4 @@
             var nResult = cef_request_context_t.get_media_router(GetSelf(), nCallback);
             return CefMediaRouter.FromNative(nResult);
         }
-
-        /// <summary>
-        /// Returns the current value for |content_type| that applies for the
-        /// specified URLs. If both URLs are NULL the default value will be returned.
-        /// Returns nullptr if no value is configured. Must be called on the browser
-        /// process UI thread.
-        /// </summary>
-        public CefValue GetWebsiteSettings(
-            string requestingUrl,
-            string topLevelUrl,
-            CefContentSettingType contentType)
-        {
-            fixed (char* requestingUrl_str = requestingUrl)
-            fixed (char* topLevelUrl_str = topLevelUrl)
-            {
-                var n_requestingUrl = new cef_string_t(requestingUrl_str, requestingUrl != null ? requestingUrl.Length : 0);
-                var n_topLevelUrl = new cef_string_t(topLevelUrl_str, topLevelUrl != null ? topLevelUrl.Length : 0);
-
-                var n_result = cef_request_context_t.get_website_setting(GetSelf(), &n_requestingUrl, &n_topLevelUrl, contentType);
-
-                return CefValue.FromNativeOrNull(n_result);
-            }
-        }
-
-        /// <summary>
-        /// Sets the current value for |content_type| for the specified URLs in the
-        /// default scope. If both URLs are NULL, and the context is not incognito,
-        /// the default value will be set. Pass nullptr for |value| to remove the
-        /// default value for this content type.
-        ///
-        /// WARNING: Incorrect usage of this function may cause instability or
-        /// security issues in Chromium. Make sure that you first understand the
-        /// potential impact of any changes to |content_type| by reviewing the related
-        /// source code in Chromium. For example, if you plan to modify
-        /// CEF_CONTENT_SETTING_TYPE_POPUPS, first review and understand the usage of
-        /// ContentSettingsType::POPUPS in Chromium:
-        /// https://source.chromium.org/search?q=ContentSettingsType::POPUPS
-        /// </summary>
-        public void SetWebsiteSettings(
-                 string requestingUrl,
-                string topLevelUrl, 
-                CefContentSettingType contentType, 
-                CefValue value)
-        {
-            fixed (char* requestingUrl_str = requestingUrl)
-            fixed (char* topLevelUrl_str = topLevelUrl)
-            {
-                var n_requestingUrl = new cef_string_t(requestingUrl_str, requestingUrl != null ? requestingUrl.Length : 0);
-                var n_topLevelUrl = new cef_string_t(topLevelUrl_str, topLevelUrl != null ? topLevelUrl.Length : 0);
-                var n_value = value.ToNative();
-
-                cef_request_context_t.set_website_setting(GetSelf(), &n_requestingUrl, &n_topLevelUrl, contentType, n_value);
-            }
-        }
-
-        /// <summary>
-        /// Returns the current value for |content_type| that applies for the
-        /// specified URLs. If both URLs are NULL the default value will be returned.
-        /// Returns nullptr if no value is configured. Must be called on the browser
-        /// process UI thread.
-        /// </summary>
-        public CefContentSettingValue GetContentSetting(
-            string requestingUrl,
-            string topLevelUrl,
-            CefContentSettingType contentType)
-        {
-            fixed (char* requestingUrl_str = requestingUrl)
-            fixed (char* topLevelUrl_str = topLevelUrl)
-            {
-                var n_requestingUrl = new cef_string_t(requestingUrl_str, requestingUrl != null ? requestingUrl.Length : 0);
-                var n_topLevelUrl = new cef_string_t(topLevelUrl_str, topLevelUrl != null ? topLevelUrl.Length : 0);
-
-                return cef_request_context_t.get_content_setting(GetSelf(), &n_requestingUrl, &n_topLevelUrl, contentType);
-            }
-        }
-
-        /// <summary>
-        /// Sets the current value for |content_type| for the specified URLs in the
-        /// default scope. If both URLs are NULL, and the context is not incognito,
-        /// the default value will be set. Pass CEF_CONTENT_SETTING_VALUE_DEFAULT for
-        /// |value| to use the default value for this content type.
-        ///
-        /// WARNING: Incorrect usage of this function may cause instability or
-        /// security issues in Chromium. Make sure that you first understand the
-        /// potential impact of any changes to |content_type| by reviewing the related
-        /// source code in Chromium. For example, if you plan to modify
-        /// CEF_CONTENT_SETTING_TYPE_POPUPS, first review and understand the usage of
-        /// ContentSettingsType::POPUPS in Chromium:
-        /// https://source.chromium.org/search?q=ContentSettingsType::POPUPS
-        /// </summary>
-        public void setContentSetting(
-                string requestingUrl,
-                string topLevelUrl,
-                CefContentSettingType contentType,
-                CefContentSettingValue value)
-        {
-            fixed (char* requestingUrl_str = requestingUrl)
-            fixed (char* topLevelUrl_str = topLevelUrl)
-            {
-                var n_requestingUrl = new cef_string_t(requestingUrl_str, requestingUrl != null ? requestingUrl.Length : 0);
-                var n_topLevelUrl = new cef_string_t(topLevelUrl_str, topLevelUrl != null ? topLevelUrl.Length : 0);
-
-                cef_request_context_t.set_content_setting(GetSelf(), &n_requestingUrl, &n_topLevelUrl, contentType, value);
-            }
-        }
-
-
     }
-}

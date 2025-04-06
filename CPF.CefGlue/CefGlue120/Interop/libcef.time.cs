@@ -18,8 +18,8 @@ namespace CPF.CefGlue.Interop
         [DllImport(DllName, EntryPoint = "cef_time_to_basetime", CallingConvention = CEF_CALL)]
         public static extern int time_to_basetime(in CefTime from, out CefBaseTime to);
 
-        //[DllImport(DllName, EntryPoint = "cef_time_from_basetime", CallingConvention = CEF_CALL)]
-        //public static extern int time_from_basetime(CefBaseTime from, out CefTime to);
+        [DllImport(DllName, EntryPoint = "cef_time_from_basetime", CallingConvention = CEF_CALL)]
+        public static extern int time_from_basetime(CefBaseTime from, out CefTime to);
 
         /*
         ///

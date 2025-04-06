@@ -9,6 +9,7 @@ namespace CPF.CefGlue.Interop
     [StructLayout(LayoutKind.Sequential, Pack = libcef.ALIGN)]
     internal unsafe struct cef_touch_handle_state_t
     {
+        public UIntPtr size;
         public int touch_handle_id;
         public CefTouchHandleStateFlags flags;
         public int enabled;

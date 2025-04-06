@@ -1,4 +1,4 @@
-namespace CPF.CefGlue
+﻿namespace CPF.CefGlue
 {
     using System;
     using System.Collections.Generic;

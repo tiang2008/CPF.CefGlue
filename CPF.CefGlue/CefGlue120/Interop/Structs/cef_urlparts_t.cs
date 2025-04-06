@@ -9,6 +9,7 @@ namespace CPF.CefGlue.Interop
     [StructLayout(LayoutKind.Sequential, Pack = libcef.ALIGN)]
     internal unsafe struct cef_urlparts_t
     {
+        public UIntPtr size;
         public cef_string_t spec;
         public cef_string_t scheme;
         public cef_string_t username;
@@ -33,5 +34,27 @@ namespace CPF.CefGlue.Interop
             libcef.string_clear(&self->query);
             libcef.string_clear(&self->fragment);
         }
+        
+        #region Alloc & Free
+        private static int _sizeof;
+
+        static cef_urlparts_t()
+        {
+            _sizeof = Marshal.SizeOf(typeof(cef_urlparts_t));
+        }
+
+        public static cef_urlparts_t* Alloc()
+        {
+            var ptr = (cef_urlparts_t*)Marshal.AllocHGlobal(_sizeof);
+            *ptr = new cef_urlparts_t();
+            ptr->size = (UIntPtr)_sizeof;
+            return ptr;
+        }
+
+        public static void Free(cef_urlparts_t* ptr)
+        {
+            Marshal.FreeHGlobal((IntPtr)ptr);
+        }
+        #endregion
     }
 }

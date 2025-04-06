@@ -9,6 +9,7 @@ namespace CPF.CefGlue.Interop
     [StructLayout(LayoutKind.Sequential, Pack = libcef.ALIGN)]
     internal unsafe struct cef_pdf_print_settings_t
     {
+        public UIntPtr size;
         public int landscape;
         public int print_background;
         public double scale;
@@ -44,6 +45,7 @@ namespace CPF.CefGlue.Interop
         {
             var ptr = (cef_pdf_print_settings_t*)Marshal.AllocHGlobal(_sizeof);
             *ptr = new cef_pdf_print_settings_t();
+            ptr->size = (UIntPtr)_sizeof;
             return ptr;
         }
 

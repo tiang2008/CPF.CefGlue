@@ -102,7 +102,7 @@ namespace CPF.CefGlue
 
         private static string BrowserProcessFileName {
             get {
-                const string Filename = "Xilium.CefGlue.BrowserProcess";
+                const string Filename = "CPF.CefGlue.BrowserProcess";
                 switch (CefRuntime.Platform)
                 {
                     case CefRuntimePlatform.Windows:

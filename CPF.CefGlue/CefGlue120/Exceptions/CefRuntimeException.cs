@@ -1,14 +1,11 @@
-﻿namespace CPF.CefGlue
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
+﻿using System;
 
-    public class CefRuntimeException : Exception
+namespace CPF.CefGlue;
+
+public class CefRuntimeException : Exception
+{
+    public CefRuntimeException(string message)
+        : base(message)
     {
-        public CefRuntimeException(string message)
-            : base(message)
-        {
-        }
     }
 }

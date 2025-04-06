@@ -109,6 +109,8 @@
         // Common properties for windows & macosx
         public abstract string Name { get; set; }
         public abstract CefRectangle Bounds { get; set; }
+        
+        public abstract CefRuntimeStyle RuntimeStyle { get; set; }
 
         // Windows-specific
         public abstract WindowStyle Style { get; set; }

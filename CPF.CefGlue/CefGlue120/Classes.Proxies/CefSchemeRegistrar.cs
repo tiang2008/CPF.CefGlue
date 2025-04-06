@@ -1,43 +1,38 @@
-﻿namespace CPF.CefGlue
+﻿using System;
+using CPF.CefGlue.Interop;
+
+namespace CPF.CefGlue;
+
+/// <summary>
+///     Class that manages custom scheme registrations.
+/// </summary>
+public sealed unsafe partial class CefSchemeRegistrar
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using CPF.CefGlue.Interop;
+    internal void ReleaseObject()
+    {
+        _self = null;
+    }
 
     /// <summary>
-    /// Class that manages custom scheme registrations.
+    ///     Register a custom scheme. This method should not be called for the built-in
+    ///     HTTP, HTTPS, FILE, FTP, ABOUT and DATA schemes.
+    ///     See cef_scheme_options_t for possible values for |options|.
+    ///     This function may be called on any thread. It should only be called once
+    ///     per unique |scheme_name| value. If |scheme_name| is already registered or
+    ///     if an error occurs this method will return false.
     /// </summary>
-    public sealed unsafe partial class CefSchemeRegistrar
+    public bool AddCustomScheme(string schemeName, CefSchemeOptions options)
     {
-        internal void ReleaseObject()
-        {
-            _self = null;
-        }
+        if (schemeName == null) throw new ArgumentNullException("schemeName");
 
-        /// <summary>
-        /// Register a custom scheme. This method should not be called for the
-        /// built-in HTTP, HTTPS, FILE, FTP, ABOUT and DATA schemes.
-        /// See cef_scheme_options_t for possible values for |options|.
-        /// This function may be called on any thread. It should only be called once
-        /// per unique |scheme_name| value. If |scheme_name| is already registered or
-        /// if an error occurs this method will return false.
-        /// </summary>
-        public bool AddCustomScheme(string schemeName, CefSchemeOptions options)
+        fixed (char* schemeName_str = schemeName)
         {
-            if (schemeName == null)
-                throw new ArgumentNullException(nameof(schemeName));
-
-            fixed (char* schemeName_str = schemeName)
-            {
-                var n_schemeName = new cef_string_t(schemeName_str, schemeName.Length);
-                return cef_scheme_registrar_t.add_custom_scheme(
-                    _self,
-                    &n_schemeName,
-                    (int)options
-                    ) != 0;
-            }
+            var n_schemeName = new cef_string_t(schemeName_str, schemeName.Length);
+            return cef_scheme_registrar_t.add_custom_scheme(
+                _self,
+                &n_schemeName,
+                (int) options
+            ) != 0;
         }
     }
 }

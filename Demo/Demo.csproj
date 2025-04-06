@@ -41,12 +41,12 @@
     <ProjectReference Include="..\CPF.CefGlue\CPF.CefGlue.csproj" />
   </ItemGroup>
 
-	<PropertyGroup>
-		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
-		<IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
-	</PropertyGroup>
 	<ItemGroup>
 		<RdXmlFile Include="rd.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="extensions\" />
 	</ItemGroup>
 
 </Project>

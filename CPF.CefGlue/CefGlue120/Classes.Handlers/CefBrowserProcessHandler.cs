@@ -88,38 +88,27 @@
         {
         }
 
+
         private int on_already_running_app_relaunch(cef_browser_process_handler_t* self, cef_command_line_t* command_line, cef_string_t* current_directory)
         {
             CheckSelf(self);
+            
+            var m_commandLine = CefCommandLine.FromNative(command_line);
+            var m_current_directory = cef_string_t.ToString(current_directory);
 
-            using (var m_commandLine = CefCommandLine.FromNative(command_line)) 
-            {
-                return OnAlreadyRunningAppRelaunch(m_commandLine, cef_string_t.ToString(current_directory)) ? 1 : 0;
-            }
+            bool result = OnAlreadyRunningAppRelaunch(ref m_commandLine, ref m_current_directory);
+
+            *command_line = *m_commandLine.ToNative();
+            cef_string_t.Copy(m_current_directory, current_directory);
+
+            return result ? 1 : 0;
         }
 
-        /// <summary>
-        /// Implement this method to provide app-specific behavior when an already
-        /// running app is relaunched with the same CefSettings.root_cache_path value.
-        /// For example, activate an existing app window or create a new app window.
-        /// |command_line| will be read-only. Do not keep a reference to
-        /// |command_line| outside of this method. Return true if the relaunch is
-        /// handled or false for default relaunch behavior. Default behavior will
-        /// create a new default styled Chrome window.
-        ///
-        /// To avoid cache corruption only a single app instance is allowed to run for
-        /// a given CefSettings.root_cache_path value. On relaunch the app checks a
-        /// process singleton lock and then forwards the new launch arguments to the
-        /// already running app process before exiting early. Client apps should
-        /// therefore check the CefInitialize() return value for early exit before
-        /// proceeding.
-        ///
-        /// This method will be called on the browser process UI thread.
-        /// </summary>
-        protected virtual bool OnAlreadyRunningAppRelaunch(CefCommandLine commandLine, string currentDirectory)
+        protected virtual bool OnAlreadyRunningAppRelaunch(ref CefCommandLine commandLine, ref string currentDirectory)
         {
             return false;
         }
+
 
         private void on_schedule_message_pump_work(cef_browser_process_handler_t* self, long delay_ms)
         {
@@ -159,6 +148,25 @@
         /// the browser window is closed manually. This method is currently only used
         /// with the chrome runtime.
         /// </summary>
-        protected virtual CefClient GetDefaultClient() => null;
+        protected virtual CefClient? GetDefaultClient() => null;
+
+        private
+            cef_request_context_handler_t* get_default_request_context_handler(cef_browser_process_handler_t* self)
+        {
+            CheckSelf(self);
+
+            CefRequestContextHandler? m_request_context_handler = GetDefaultRequestContextHandler();
+
+            return m_request_context_handler != null ? m_request_context_handler.ToNative() : null;
+        }
+
+        /// <summary>
+        /// Return the default handler for use with a new user or incognito profile
+        /// (CefRequestContext object). If null is returned the CefRequestContext will
+        /// be unmanaged (no callbacks will be executed for that CefRequestContext).
+        /// This method is currently only used with the Chrome runtime when creating
+        /// new browser windows via Chrome UI.
+        /// </summary>
+        protected virtual CefRequestContextHandler? GetDefaultRequestContextHandler() => null;
     }
 }

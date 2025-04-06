@@ -95,6 +95,29 @@
         { }
 
 
+        private void on_frame_destroyed(cef_frame_handler_t* self, cef_browser_t* browser, cef_frame_t* frame)
+        {
+            CheckSelf(self);
+
+            var mBrowser = CefBrowser.FromNative(browser);
+            var mFrame = CefFrame.FromNative(frame);
+            
+            OnFrameDestroyed(mBrowser, mFrame);
+        }
+
+        /// <summary>
+        /// Called when an existing frame is destroyed. This will be the last
+        /// notification that references |frame| and CefFrame::IsValid() will return
+        /// false for |frame|. If called during browser destruction and after
+        /// CefLifeSpanHandler::OnBeforeClose() then CefBrowser::IsValid() will return
+        /// false for |browser|. Any queued commands that have not been sent will be
+        /// discarded before this callback.
+        /// </summary>
+        protected virtual void OnFrameDestroyed(CefBrowser browser, CefFrame frame)
+        {
+        }
+
+
         private void on_frame_attached(cef_frame_handler_t* self, cef_browser_t* browser, cef_frame_t* frame, int reattached)
         {
             CheckSelf(self);

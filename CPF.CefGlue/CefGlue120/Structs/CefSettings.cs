@@ -2,10 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Text;
     using CPF.CefGlue.Interop;
-    using CPF.Platform;
 
     /// <summary>
     /// Initialization settings. Specify <c>null</c> or 0 to get the recommended default
@@ -17,15 +15,6 @@
         public CefSettings()
         {
             BackgroundColor = new CefColor(255, 255, 255, 255);
-            MultiThreadedMessageLoop = Application.OperatingSystem != OperatingSystemType.OSX;
-            LogSeverity = CefLogSeverity.Disable;
-            LogFile = "cef.log";
-            ResourcesDirPath = Application.StartupPath;
-            RemoteDebuggingPort = 20480;
-            NoSandbox = true;
-            WindowlessRenderingEnabled = true;
-            LocalesDirPath = Path.Combine(ResourcesDirPath, "locales");
-            FrameworkDirPath = Application.StartupPath;
         }
 
         /// <summary>
@@ -65,17 +54,10 @@
         public string MainBundlePath { get; set; }
 
         /// <summary>
-        /// Set to true to enable use of the Chrome runtime in CEF. This feature
-        /// is considered experimental and is not recommended for most users at this
-        /// time. See issue #2969 for details.
-        /// </summary>
-        public bool ChromeRuntime { get; set; }
-
-        /// <summary>
         /// Set to <c>true</c> to have the browser process message loop run in a separate
         /// thread. If <c>false</c> then the CefDoMessageLoopWork() function must be
-        /// called from your application message loop. This option is only supported
-        /// on Windows and Linux.
+        /// called from your application message loop. This option is only supported on
+        /// Windows and Linux.
         /// </summary>
         public bool MultiThreadedMessageLoop { get; set; }
 
@@ -125,24 +107,16 @@
         /// The root directory that all CefSettings.cache_path and
         /// CefRequestContextSettings.cache_path values must have in common. If this
         /// value is empty and CefSettings.cache_path is non-empty then it will
-        /// default to the CefSettings.cache_path value. If this value is non-empty
-        /// then it must be an absolute path. Failure to set this value correctly may
-        /// result in the sandbox blocking read/write access to the cache_path
-        /// directory.
+        /// default to the CefSettings.cache_path value. If both values are empty
+        /// then the default platform-specific directory will be used
+        /// ("~/.config/cef_user_data" directory on Linux, "~/Library/Application
+        /// Support/CEF/User Data" directory on MacOS, "AppData\Local\CEF\User Data"
+        /// directory under the user profile directory on Windows). If this value is
+        /// non-empty then it must be an absolute path. Failure to set this value
+        /// correctly may result in the sandbox blocking read/write access to certain
+        /// files.
         /// </summary>
         public string RootCachePath { get; set; }
-
-        ///// <summary>
-        ///// The location where user data such as the Widevine CDM module and spell
-        ///// checking dictionary files will be stored on disk. If this value is empty
-        ///// then the default platform-specific user data directory will be used
-        ///// ("~/.config/cef_user_data" directory on Linux, "~/Library/Application
-        ///// Support/CEF/User Data" directory on MacOS, "AppData\Local\CEF\User Data"
-        ///// directory under the user profile directory on Windows). If this value is
-        ///// non-empty then it must be an absolute path. When using the Chrome runtime
-        ///// this value will be ignored in favor of the |root_cache_path| value.
-        ///// </summary>
-        //public string UserDataPath { get; set; }
 
         /// <summary>
         /// To persist session cookies (cookies without an expiry date or validity
@@ -155,16 +129,6 @@
         /// CefRequestContextSettings.persist_session_cookies value.
         /// </summary>
         public bool PersistSessionCookies { get; set; }
-
-        /// <summary>
-        /// To persist user preferences as a JSON file in the cache path directory set
-        /// this value to true. A |cache_path| value must also be specified
-        /// to enable this feature. Also configurable using the
-        /// "persist-user-preferences" command-line switch. Can be overridden for
-        /// individual CefRequestContext instances via the
-        /// CefRequestContextSettings.persist_user_preferences value.
-        /// </summary>
-        public bool PersistUserPreferences { get; set; }
 
         /// <summary>
         /// Value that will be returned as the User-Agent HTTP header. If empty the
@@ -208,6 +172,14 @@
         /// "warning", "error", "fatal" or "disable".
         /// </summary>
         public CefLogSeverity LogSeverity { get; set; }
+        
+        /// <summary>
+        /// The log items prepended to each log line. If not set the default log items
+        /// will be used. Also configurable using the "log-items" command-line switch
+        /// with a value of "none" for no log items, or a comma-delimited list of
+        /// values "pid", "tid", "timestamp" or "tickcount" for custom log items.
+        /// </summary>
+        public CefLogItems LogItems { get; set; }
 
         /// <summary>
         /// Custom flags that will be used when initializing the V8 JavaScript engine.
@@ -234,15 +206,6 @@
         /// switch.
         /// </summary>
         public string LocalesDirPath { get; set; }
-
-        /// <summary>
-        /// Set to <c>true</c> to disable loading of pack files for resources and
-        /// locales. A resource bundle handler must be provided for the browser and
-        /// render processes via CefApp::GetResourceBundleHandler() if loading of pack
-        /// files is disabled. Also configurable using the "disable-pack-loading"
-        /// command- line switch.
-        /// </summary>
-        public bool PackLoadingDisabled { get; set; }
 
         /// <summary>
         /// Set to a value between 1024 and 65535 to enable remote debugging on the
@@ -278,10 +241,9 @@
 
         /// <summary>
         /// Comma delimited ordered list of language codes without any whitespace that
-        /// will be used in the "Accept-Language" HTTP header. May be overridden on a
-        /// per-browser basis using the CefBrowserSettings.accept_language_list value.
-        /// If both values are empty then "en-US,en" will be used. Can be overridden
-        /// for individual CefRequestContext instances via the
+        /// will be used in the "Accept-Language" HTTP request header and
+        /// "navigator.language" JS attribute. Can be overridden for individual
+        /// CefRequestContext instances via the
         /// CefRequestContextSettings.accept_language_list value.
         /// </summary>
         public string AcceptLanguageList { get; set; }
@@ -300,7 +262,7 @@
         public string CookieableSchemesList { get; set; }
 
         public bool CookieableSchemesExcludeDefaults { get; set; }
-
+        
         /// <summary>
         /// Specify an ID to enable Chrome policy management via Platform and OS-user
         /// policies. On Windows, this is a registry key like
@@ -315,7 +277,7 @@
         /// for details.
         /// </summary>
         public string ChromePolicyId { get; set; }
-
+        
         /// <summary>
         /// Specify an ID for an ICON resource that can be loaded from the main
         /// executable and used when creating default Chrome windows such as DevTools
@@ -332,7 +294,6 @@
             cef_string_t.Copy(BrowserSubprocessPath, &ptr->browser_subprocess_path);
             cef_string_t.Copy(FrameworkDirPath, &ptr->framework_dir_path);
             cef_string_t.Copy(MainBundlePath, &ptr->main_bundle_path);
-            ptr->chrome_runtime = ChromeRuntime ? 1 : 0;
             ptr->multi_threaded_message_loop = MultiThreadedMessageLoop ? 1 : 0;
             ptr->windowless_rendering_enabled = WindowlessRenderingEnabled ? 1 : 0;
             ptr->external_message_pump = ExternalMessagePump ? 1 : 0;
@@ -340,16 +301,15 @@
             cef_string_t.Copy(CachePath, &ptr->cache_path);
             cef_string_t.Copy(RootCachePath, &ptr->root_cache_path);
             ptr->persist_session_cookies = PersistSessionCookies ? 1 : 0;
-            ptr->persist_user_preferences = PersistUserPreferences ? 1 : 0;
             cef_string_t.Copy(UserAgent, &ptr->user_agent);
             cef_string_t.Copy(UserAgentProduct, &ptr->user_agent_product);
             cef_string_t.Copy(Locale, &ptr->locale);
             cef_string_t.Copy(LogFile, &ptr->log_file);
             ptr->log_severity = LogSeverity;
+            ptr->log_items = LogItems;
             cef_string_t.Copy(JavaScriptFlags, &ptr->javascript_flags);
             cef_string_t.Copy(ResourcesDirPath, &ptr->resources_dir_path);
             cef_string_t.Copy(LocalesDirPath, &ptr->locales_dir_path);
-            ptr->pack_loading_disabled = PackLoadingDisabled ? 1 : 0;
             ptr->remote_debugging_port = RemoteDebuggingPort;
             ptr->uncaught_exception_stack_size = UncaughtExceptionStackSize;
             ptr->background_color = BackgroundColor.ToArgb();
@@ -377,6 +337,7 @@
             libcef.string_clear(&ptr->locales_dir_path);
             libcef.string_clear(&ptr->accept_language_list);
             libcef.string_clear(&ptr->cookieable_schemes_list);
+            libcef.string_clear(&ptr->chrome_policy_id);
         }
 
         internal static void Free(cef_settings_t* ptr)

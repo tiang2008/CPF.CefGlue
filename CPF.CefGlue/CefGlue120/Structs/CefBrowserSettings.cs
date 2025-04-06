@@ -182,8 +182,8 @@
         }
 
         /// <summary>
-        /// Controls whether image URLs will be loaded from the network. A cached
-        /// image will still be rendered if requested. Also configurable using the
+        /// Controls whether image URLs will be loaded from the network. A cached image
+        /// will still be rendered if requested. Also configurable using the
         /// "disable-image-loading" command-line switch.
         /// </summary>
         public CefState ImageLoading
@@ -273,8 +273,8 @@
         }
 
         /// <summary>
-        /// Controls whether the Chrome status bubble will be used. Only supported
-        /// with the Chrome runtime. For details about the status bubble see
+        /// Controls whether the Chrome status bubble will be used. Only supported with
+        /// the Chrome runtime. For details about the status bubble see
         /// https://www.chromium.org/user-experience/status-bubble/
         /// </summary>
         public CefState ChromeStatusBubble
@@ -282,7 +282,7 @@
             get { return _self->chrome_status_bubble; }
             set { _self->chrome_status_bubble = value; }
         }
-
+        
         /// <summary>
         /// Controls whether the Chrome zoom bubble will be shown when zooming. Only
         /// supported with the Chrome runtime.

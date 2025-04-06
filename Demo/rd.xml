@@ -8,7 +8,5 @@
 		</Assembly>
 		<Assembly Name="CPF.CefGlue" Dynamic="Required All" >
 		</Assembly>
-		<Assembly Name="Demo" Dynamic="Required All" >
-		</Assembly>
 	</Application>
 </Directives>

@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
 
-    public static class Helpers
+    internal static class Helpers
     {
         public static void PostTask(CefThreadId threadId, Action action)
         {
@@ -46,11 +46,11 @@
 
 
 
-        public delegate void Action();
-        public delegate void Action<T1, T2>(T1 arg1, T2 arg2);
-        public delegate void Action<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3);
-        public delegate void Action<T1, T2, T3, T4>(T1 arg1, T2 arg2, T3 arg3, T4 arg4);
-        public delegate void Action<T1, T2, T3, T4, T5>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5);
+        internal delegate void Action();
+        internal delegate void Action<T1, T2>(T1 arg1, T2 arg2);
+        internal delegate void Action<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3);
+        internal delegate void Action<T1, T2, T3, T4>(T1 arg1, T2 arg2, T3 arg3, T4 arg4);
+        internal delegate void Action<T1, T2, T3, T4, T5>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5);
 
         //internal delegate TResult Func<TResult>();
 

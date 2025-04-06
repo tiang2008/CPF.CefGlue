@@ -38,10 +38,10 @@
         /// Converts cef_basetime_t to cef_time_t. Returns true (1) on success and
         /// false (0) on failure.
         /// </summary>
-        //public unsafe bool UtcExplode(out CefTime exploded)
-        //{
-        //    return libcef.time_from_basetime(this, out exploded) != 0;
-        //}
+        public unsafe bool UtcExplode(out CefTime exploded)
+        {
+            return libcef.time_from_basetime(this, out exploded) != 0;
+        }
 
         /// <summary>
         /// Converts cef_time_t to cef_basetime_t. Returns true (1) on success and

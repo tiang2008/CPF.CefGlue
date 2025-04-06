@@ -15,7 +15,7 @@ namespace Demo
         [JSFunction]
         public string TestFun(string test)
         {
-            return "返回值：" + test;
+            return "返回值：" + DateTime.Now.ToString();
         }
     }
 }

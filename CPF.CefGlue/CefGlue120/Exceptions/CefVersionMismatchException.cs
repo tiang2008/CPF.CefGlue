@@ -1,14 +1,9 @@
-﻿namespace CPF.CefGlue
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
+﻿namespace CPF.CefGlue;
 
-    public sealed class CefVersionMismatchException : CefRuntimeException
+public sealed class CefVersionMismatchException : CefRuntimeException
+{
+    public CefVersionMismatchException(string message)
+        : base(message)
     {
-        public CefVersionMismatchException(string message)
-            : base(message)
-        {
-        }
     }
 }
