@@ -5,7 +5,7 @@
     <Version>2.133.4.2</Version>
 	<Authors>tian2008</Authors>
     <PackageId>CPF.CefGlue</PackageId>
-    <Description>CEF_VERSION  120.1.8+ge6b45b0+chromium-120.0.6099.109  Cef浏览器控件</Description>
+    <Description>CEF_VERSION  133.4.2+g0852ba6+chromium-133.0.6943.127  Cef浏览器控件</Description>
     <PackageReleaseNotes>Cef浏览器控件</PackageReleaseNotes>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<LangVersion>latest</LangVersion>

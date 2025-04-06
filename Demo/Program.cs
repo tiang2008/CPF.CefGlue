@@ -24,7 +24,7 @@ namespace Demo
                 return;
             }
 
-            //到 https://cef-builds.spotifycdn.com/index.html#windows32:120.1.8%2Bge6b45b0%2Bchromium-120.0.6099.109 下载对应平台的二进制文件，一般是选择 Sample Application ......client.tar.bz2
+            //到 https://cef-builds.spotifycdn.com/index.html#windows64:133.4.2%2Bg0852ba6%2Bchromium-133.0.6943.127 下载对应平台的二进制文件，一般是选择 Sample Application ......client.tar.bz2
             //需要注意的是如果你需要的是Linux平台的，需要手动使用strip命令将调试信息剥离（Linux那边打开控制台输入strip 再把libcef.so拖进来，再按enter，so文件就小了）或者自己调整编译参数重新编译，因为网站上下载的二进制文件巨大，达到一个G了
             //一般情况下，把压缩包里的比如libcef...同目录里的所有文件和文件夹都复制到你的程序目录就行
             //如果是Mac的话
