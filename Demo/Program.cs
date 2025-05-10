@@ -47,7 +47,11 @@ namespace Demo
 
             CefRuntime.Load();
 
-            CefRuntime.Initialize(mainArgs, new CefSettings { }, app, IntPtr.Zero);
+            CefRuntime.Initialize(mainArgs, new CefSettings {
+                PersistSessionCookies = true,
+                RootCachePath = Application.StartupPath + "\\LocalStorage\\",
+                
+            }, app, IntPtr.Zero);
 
             var model = new MainModel();
             Application.Run(new Window1 { DataContext = model, CommandContext = model });

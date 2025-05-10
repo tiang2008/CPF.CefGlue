@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Demo
 {
@@ -15,6 +16,7 @@ namespace Demo
         [JSFunction]
         public string TestFun(string test)
         {
+            Thread.Sleep(5000);
             return "返回值：" + DateTime.Now.ToString();
         }
     }

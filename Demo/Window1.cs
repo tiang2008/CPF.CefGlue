@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TransLinkApp.Core;
 
 namespace Demo
 {
@@ -68,8 +69,9 @@ namespace Demo
                         MarginTop = 15,
                         Width = 322,
                     },
-                    new WebBrowser
+                    new MyWebBrowser
                     {
+                        ID="a",
                         PresenterFor = this,
                         Name = nameof(webBrowser),
                         Bindings =
@@ -141,8 +143,7 @@ namespace Demo
             webBrowser = FindPresenterByName<WebBrowser>(nameof(webBrowser));
             textBox = FindPresenterByName<TextBox>(nameof(textBox));
 
-            webBrowser.LoadEnd += WebBrowser_LoadEnd; ;
-   
+            webBrowser.LoadEnd += WebBrowser_LoadEnd;
         }
 
         private void WebBrowser_LoadEnd(object sender, LoadEndEventArgs e)
@@ -161,8 +162,129 @@ namespace Demo
         }
         async void InvokeJS(CpfObject obj, RoutedEventArgs eventArgs)
         {
-            var r = await webBrowser.ExecuteJavaScript("TestFun('调用绑定到JS里的C#方法')");
-            MessageBox.Show(r.ToString());
+            string js = @"
+ function GetMessageFromDBAsync(text) {
+                console.log(""TransLinkApp_GetMessageFromDB"", text);
+                return new Promise((resolve) => {
+
+                    // 使用 setTimeout 将同步操作异步化
+                    //setTimeout(() => {
+                    TestFun(text,resolve);
+                    //}, 0);
+                });
+            }
+
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+GetMessageFromDBAsync('调用绑定到JS里的C#方法')
+                                .then((transferText) => {
+                                    console.log('handleMessageIncome:'+ transferText);
+                                }).catch(() => {
+                                    console.log(""catch"");
+                                });
+";
+            var r = await webBrowser.ExecuteJavaScript(js);
+            //MessageBox.Show("111");
         }
 
     }
