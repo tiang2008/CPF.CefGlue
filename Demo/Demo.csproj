@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CPF.CefGlue" Version="4.134.3.12" />
+    <PackageReference Include="CPF.CefGlue" Version="8.134.3.12" />
     <PackageReference Include="Xhm.CPF" Version="0.9.6.*" />
     <PackageReference Include="Xhm.CPF.Windows" Version="0.9.6.*" />
     <PackageReference Include="Xhm.CPF.Skia" Version="0.9.6.*" />
